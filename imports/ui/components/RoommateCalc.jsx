@@ -6,8 +6,9 @@ import FloatLabel from './forms/FloatLabelForm.jsx'
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import AppBar from 'material-ui/AppBar';
 
-class FuseTestContainer extends React.Component {
+class RoommateCalc extends React.Component {
     constructor() {
         super();
 
@@ -20,37 +21,54 @@ class FuseTestContainer extends React.Component {
     }
     render() {
         const optionsForDays = []
-        for(let a = 1; a < 11; a++){
+        for(let a = 1; a < 8; a++){
             optionsForDays.push(<MenuItem key={`daysOptions-${a}`} value={a} primaryText={a} />)
         }
+
+        const totalCost = (this.state.daysRented * this.state.costPerNight).toFixed(2)
         return (
-            <div className="student-calc-container container">
-                <div className="row">
-                    <div className="col s12 m8 offset-m2 l10 offset-l1">
-                        <div className="row">
-                            <div className="col s6 m6 l6">
-                                <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Total Days Rented"
-                                             floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true}>
-                                    {optionsForDays}
-                                </SelectField>
+            <div>
+                <AppBar
+                    title="Roomie Calc"
+                    iconStyleLeft={{visibility: "hidden"}}
+                />
+                <div className="student-calc-container container">
+                    <div className="row">
+                        <div className="col s12 m8 offset-m2 l10 offset-l1">
+
+                            <p className="roomie-header">Set nights staying (#1), Set cost per night (#2), Follow step #3</p>
+                            <div className="row">
+                                <div className="col s6 m6 l6">
+                                    <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Total Days Rented"
+                                                 floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true}>
+                                        {optionsForDays}
+                                    </SelectField>
+                                </div>
+                                <div className="col s6 m6 l6">
+                                    <TextField
+                                        type="number"
+                                        defaultValue={this.state.costPerNight}
+                                        floatingLabelText="2. Cost Per Night"
+                                        required={true}
+                                        onChange={this.updateCostPerNight}
+                                        fullWidth={true}/>
+                                </div>
                             </div>
-                            <div className="col s6 m6 l6">
-                                <TextField
-                                    defaultValue={this.state.costPerNight}
-                                    floatingLabelText="2. Cost Per Night"
-                                    required={true}
-                                    onChange={this.updateCostPerNight}
-                                    fullWidth={true}/>
+                            <p className="roomie-header">3. Add some roomies and select the number of days they'll be in the room</p>
+                            <div className="roomies-container">
+                                <RoomieComp key={`roomie-header`} roomie={{name: 'Name',daysInRoom: 'Days In Room',amountOwed: 'Amount Owed'}} idx={-1}
+                                            onAdd={()=>{this.addRoomie(-1)}} onRemove={()=>{}}/>
+                                {this.state.roomies.map((roomie, idx)=> {
+                                    return <RoomieComp key={`roomie-${idx}`} roomie={roomie} idx={idx} nameOnChange={this.setRoomieName} dayOnChange={this.setRoomieDays}
+                                                       onAdd={()=>{this.addRoomie(idx)}} onRemove={()=>{this.removeRoomie(idx)}} />
+                                })}
+                                <RoomieComp key={`roomie-footer`} roomie={{name: ' ',daysInRoom: 'Total Owed',amountOwed: `$${totalCost}`}} idx={-2}
+                                            onAdd={()=>{}} onRemove={()=>{}}/>
                             </div>
-                        </div>
-                        <p className="roomie-header">3. Add some roomies and select the number of days they'll be in the room</p>
-                        <div className="roomies-container">
-                            <RoomieComp key={`roomie-header`} roomie={{name: 'Name',daysInRoom: 'Days In Room',amountOwed: 'Amount Owed'}} idx={-1}
-                                        onAdd={()=>{this.addRoomie(-1)}} onRemove={()=>{this.removeRoomie(-1)}}/>
-                            {this.state.roomies.map((roomie, idx)=> {
-                                return <RoomieComp key={`roomie-${idx}`} roomie={roomie} idx={idx} nameOnChange={this.setRoomieName} dayOnChange={this.setRoomieDays}
-                                                   onAdd={()=>{this.addRoomie(idx)}} onRemove={()=>{this.removeRoomie(idx)}} />
-                            })}
+                            <div className="row footer-text">
+                                <p>Authored by: @<a href="https://www.twitter.com/takoda117" target="_blank">Takoda117</a></p>
+                                <p>Please feel to reach out with comments and concerns</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -135,14 +153,14 @@ class FuseTestContainer extends React.Component {
 }
 
 function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange}) {
-    const optionsForDays = []
-    for(let a = 1; a < 11; a++){
+    const optionsForDays = [];
+    for(let a = 1; a < 8; a++){
         optionsForDays.push(<MenuItem key={`daysOptions-${a}`} value={a} primaryText={a} />)
     }
 
     const daySelector = <div className="select-padding"><SelectField value={roomie.daysInRoom} onChange={(e,key,value)=>{dayOnChange(value,idx)}} fullWidth={true}>
                             {optionsForDays}
-                        </SelectField></div>
+                        </SelectField></div>;
 
     return (
         <div className={`row valign-wrapper roomie ${idx<0? 'first-row': ''}` }>
@@ -152,9 +170,9 @@ function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange}) {
             <div className={`col s1 icon remove ${idx <0? 'hide': ''}`}>
                 <button onClick={()=>{onRemove(idx)}} className="btn waves-effect waves-light light-blue darken-2">-</button>
             </div>
-            <div className="col s1 icon add"><button onClick={()=>{onAdd(idx)}} className="btn waves-effect waves-light light-blue darken-2">+</button></div>
+            <div className={`col s1 icon add ${idx <-1? 'hide': ''}`}><button onClick={()=>{onAdd(idx)}} className="btn waves-effect waves-light light-blue darken-2">+</button></div>
         </div>
     )
 }
 
-export default FuseTestContainer
+export default RoommateCalc
