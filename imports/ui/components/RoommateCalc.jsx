@@ -48,7 +48,7 @@ class FuseTestContainer extends React.Component {
                             <RoomieComp key={`roomie-header`} roomie={{name: 'Name',daysInRoom: 'Days In Room',amountOwed: 'Amount Owed'}} idx={-1}
                                         onAdd={()=>{this.addRoomie(-1)}} onRemove={()=>{this.removeRoomie(-1)}}/>
                             {this.state.roomies.map((roomie, idx)=> {
-                                return <RoomieComp key={`roomie-${idx}`} roomie={roomie} idx={idx} nameOnChange={this.setRoomieName}
+                                return <RoomieComp key={`roomie-${idx}`} roomie={roomie} idx={idx} nameOnChange={this.setRoomieName} dayOnChange={this.setRoomieDays}
                                                    onAdd={()=>{this.addRoomie(idx)}} onRemove={()=>{this.removeRoomie(idx)}} />
                             })}
                         </div>
@@ -59,15 +59,19 @@ class FuseTestContainer extends React.Component {
     }
     handleDaysChange = (e, key, value) => {
         if(value > 0) {
-            this.setState({daysRented: value})
+            this.setState({daysRented: value},()=>{
+                this.recalcCost()}
+            )
         }
-    }
-    updateCostPerNight = (e,key,value) => {
+    };
+    updateCostPerNight = (e,value) => {
         const costPerNight = parseInt(value) || 0
         if (costPerNight > 0){
-            this.setState({costPerNight})
+            this.setState({costPerNight},()=>{
+                this.recalcCost()
+            })
         }
-    }
+    };
     setRoomieName = (e,idx) => {
         const roomieName = e.currentTarget.value;
         const roomiesClone = _.cloneDeep(this.state.roomies);
@@ -75,7 +79,18 @@ class FuseTestContainer extends React.Component {
         roomiesClone[idx].name = roomieName //assumes idx exists because made from array
 
         this.setState({roomies: roomiesClone})
-    }
+    };
+    setRoomieDays = (value,idx) => {
+        const roomiesClone = _.cloneDeep(this.state.roomies);
+
+        roomiesClone[idx].daysInRoom = value //assumes idx exists because made from array
+
+        this.setState({roomies: roomiesClone}, ()=>{
+            this.recalcCost();
+        })
+    };
+
+
     addRoomie = (idx) => {
         const self= this;
         const currentRoomies = _.cloneDeep(this.state.roomies)
@@ -119,13 +134,13 @@ class FuseTestContainer extends React.Component {
     }
 }
 
-function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange}) {
+function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange}) {
     const optionsForDays = []
     for(let a = 1; a < 11; a++){
         optionsForDays.push(<MenuItem key={`daysOptions-${a}`} value={a} primaryText={a} />)
     }
 
-    const daySelector = <div className="select-padding"><SelectField value={roomie.daysInRoom} onChange={()=>{}} fullWidth={true}>
+    const daySelector = <div className="select-padding"><SelectField value={roomie.daysInRoom} onChange={(e,key,value)=>{dayOnChange(value,idx)}} fullWidth={true}>
                             {optionsForDays}
                         </SelectField></div>
 
