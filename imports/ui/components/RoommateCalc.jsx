@@ -16,7 +16,8 @@ class RoommateCalc extends React.Component {
             roomies: [],
             daysRented: 1,
             sumOfDaysRented: 1,
-            costPerNight: 100
+            costPerNight: 100,
+            feesAndTaxes: 25
         }
     }
     render() {
@@ -25,7 +26,9 @@ class RoommateCalc extends React.Component {
             optionsForDays.push(<MenuItem key={`daysOptions-${a}`} value={a} primaryText={a} />)
         }
 
-        const totalCost = (this.state.daysRented * this.state.costPerNight).toFixed(2)
+        const totalCost = (this.state.daysRented * this.state.costPerNight + this.state.feesAndTaxes).toFixed(2)
+
+        const floatLableStyle = {fontSize: "0.9rem"};
         return (
             <div>
                 <AppBar
@@ -34,39 +37,48 @@ class RoommateCalc extends React.Component {
                 />
                 <div className="student-calc-container container">
                     <div className="row">
-                        <div className="col s12 m8 offset-m2 l10 offset-l1">
+                        <div className="col s12 m10 offset-m1 l10 offset-l1">
 
-                            <p className="roomie-header">Set nights staying (#1), Set cost per night (#2), Follow step #3</p>
+                            <p className="roomie-header">Set nights staying (#1), Set cost per night (#2), Set Taxes and fees (#3), Follow step #4</p>
                             <div className="row">
-                                <div className="col s6 m6 l6">
-                                    <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Total Days Rented"
-                                                 floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true}>
+                                <div className="col s4">
+                                    <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Days Rented"
+                                                 floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true} floatingLabelStyle={floatLableStyle}>
                                         {optionsForDays}
                                     </SelectField>
                                 </div>
-                                <div className="col s6 m6 l6">
+                                <div className="col s4">
                                     <TextField
                                         type="number"
                                         defaultValue={this.state.costPerNight}
-                                        floatingLabelText="2. Cost Per Night"
+                                        floatingLabelText="2. Cost per Night"
                                         required={true}
                                         onChange={this.updateCostPerNight}
                                         fullWidth={true}/>
                                 </div>
+                                <div className="col s4">
+                                    <TextField
+                                        type="number"
+                                        defaultValue={this.state.feesAndTaxes}
+                                        floatingLabelText="3. Fees and Taxes"
+                                        required={true}
+                                        onChange={this.updateFeesAndTaxes}
+                                        fullWidth={true}/>
+                                </div>
                             </div>
-                            <p className="roomie-header">3. Add some roomies and select the number of days they'll be in the room</p>
+                            <p className="roomie-header">4. Add some roomies and select the number of days they'll be in the room</p>
                             <div className="roomies-container">
                                 <RoomieComp key={`roomie-header`} roomie={{name: 'Name',daysInRoom: 'Days In Room',amountOwed: 'Amount Owed'}} idx={-1}
                                             onAdd={()=>{this.addRoomie(-1)}} onRemove={()=>{}}/>
                                 {this.state.roomies.map((roomie, idx)=> {
                                     return <RoomieComp key={`roomie-${idx}`} roomie={roomie} idx={idx} nameOnChange={this.setRoomieName} dayOnChange={this.setRoomieDays}
-                                                       onAdd={()=>{this.addRoomie(idx)}} onRemove={()=>{this.removeRoomie(idx)}} />
+                                                       onAdd={()=>{this.addRoomie(idx)}} onRemove={()=>{this.removeRoomie(idx)}} daysRented={this.state.daysRented}/>
                                 })}
                                 <RoomieComp key={`roomie-footer`} roomie={{name: ' ',daysInRoom: 'Total Owed',amountOwed: `$${totalCost}`}} idx={-2}
                                             onAdd={()=>{}} onRemove={()=>{}}/>
                             </div>
                             <div className="row footer-text">
-                                <p>Authored by: @<a href="https://www.twitter.com/takoda117" target="_blank">Takoda117</a></p>
+                                <p>Authored by: <a href="https://www.twitter.com/takoda117" target="_blank">Takoda</a></p>
                                 <p>Please feel to reach out with comments and concerns</p>
                             </div>
                         </div>
@@ -83,9 +95,17 @@ class RoommateCalc extends React.Component {
         }
     };
     updateCostPerNight = (e,value) => {
-        const costPerNight = parseInt(value) || 0
+        const costPerNight = parseFloat(value) || 0.00;
         if (costPerNight > 0){
             this.setState({costPerNight},()=>{
+                this.recalcCost()
+            })
+        }
+    };
+    updateFeesAndTaxes = (e,value) => {
+        const feesAndTaxes = parseFloat(value) || 0.00;
+        if (feesAndTaxes > 0){
+            this.setState({feesAndTaxes},()=>{
                 this.recalcCost()
             })
         }
@@ -136,7 +156,7 @@ class RoommateCalc extends React.Component {
     }
     recalcCost = () =>{
         const roomiesClone = _.cloneDeep(this.state.roomies);
-        const totalCost = this.state.daysRented * this.state.costPerNight;
+        const totalCost = (this.state.daysRented * this.state.costPerNight + this.state.feesAndTaxes).toFixed(2);
 
         let sumOfDaysRented = 0;
         roomiesClone.forEach((roomie)=>{
@@ -152,10 +172,10 @@ class RoommateCalc extends React.Component {
     }
 }
 
-function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange}) {
+function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange,daysRented}) {
     const optionsForDays = [];
-    for(let a = 1; a < 8; a++){
-        optionsForDays.push(<MenuItem key={`daysOptions-${a}`} value={a} primaryText={a} />)
+    for(let a = 1; a <= daysRented; a++){
+        optionsForDays.push(<MenuItem key={`roomieDaysOptions-${a}`} value={a} primaryText={a} />)
     }
 
     const daySelector = <div className="select-padding"><SelectField value={roomie.daysInRoom} onChange={(e,key,value)=>{dayOnChange(value,idx)}} fullWidth={true}>
@@ -164,13 +184,14 @@ function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange}) {
 
     return (
         <div className={`row valign-wrapper roomie ${idx<0? 'first-row': ''}` }>
-            <div className="col s4">{idx <0?roomie.name : <TextField onChange={(e)=>{nameOnChange(e,idx)}} id={`nameField-${idx}`} value={roomie.name} fullWidth={true}/>}</div>
+            <div className="col s4">{idx <0?roomie.name
+                : <TextField onChange={(e)=>{nameOnChange(e,idx)}} id={`nameField-${idx}`} value={roomie.name} fullWidth={true} onFocus={(e)=>{e.currentTarget.select()}}/>}</div>
             <div className="col s3">{idx <0?roomie.daysInRoom: daySelector}</div>
             <div className="col s3">{(idx >=0?'$':'')+roomie.amountOwed}</div>
-            <div className={`col s1 icon remove ${idx <0? 'hide': ''}`}>
+            <div className={`col s1 icon remove ${idx <0? 'not-visible': ''}`}>
                 <button onClick={()=>{onRemove(idx)}} className="btn waves-effect waves-light light-blue darken-2">-</button>
             </div>
-            <div className={`col s1 icon add ${idx <-1? 'hide': ''}`}><button onClick={()=>{onAdd(idx)}} className="btn waves-effect waves-light light-blue darken-2">+</button></div>
+            <div className={`col s1 icon add ${idx <-1? 'not-visible': ''}`}><button onClick={()=>{onAdd(idx)}} className="btn waves-effect waves-light light-blue darken-2">+</button></div>
         </div>
     )
 }
