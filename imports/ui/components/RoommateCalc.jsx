@@ -14,20 +14,20 @@ class RoommateCalc extends React.Component {
 
         this.state = {
             roomies: [],
-            daysRented: 1,
+            daysRented: 3,
             sumOfDaysRented: 1,
-            costPerNight: 100,
-            feesAndTaxes: 25
+            costPerNight: 95,
+            fees: 25,
+            taxRate: 6
         }
     }
     render() {
         const optionsForDays = []
-        for(let a = 1; a < 8; a++){
+        for(let a = 1; a < 15; a++){
             optionsForDays.push(<MenuItem key={`daysOptions-${a}`} value={a} primaryText={a} />)
         }
 
-        const totalCost = (this.state.daysRented * this.state.costPerNight + this.state.feesAndTaxes).toFixed(2)
-
+        const totalCost = this.totalCost().toFixed(2);
         const floatLableStyle = {fontSize: "0.9rem"};
         return (
             <div>
@@ -39,34 +39,72 @@ class RoommateCalc extends React.Component {
                     <div className="row">
                         <div className="col s12 m10 offset-m1 l10 offset-l1">
 
-                            <p className="roomie-header">Set nights staying (#1), Set cost per night (#2), Set Taxes and fees (#3), Follow step #4</p>
+                            <p className="roomie-header">Set nights staying (#1), Set cost per night (#2), Set fees (#3), Set Taxes (#4), Follow step #5</p>
                             <div className="row">
-                                <div className="col s4">
+                                <div className="col s6 l3">
                                     <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Days Rented"
                                                  floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true} floatingLabelStyle={floatLableStyle}>
                                         {optionsForDays}
                                     </SelectField>
                                 </div>
-                                <div className="col s4">
+                                <div className="col s6 l3">
                                     <TextField
                                         type="number"
+                                        min="0"
                                         defaultValue={this.state.costPerNight}
-                                        floatingLabelText="2. Cost per Night"
+                                        floatingLabelText="2. Cost per Night($)"
                                         required={true}
-                                        onChange={this.updateCostPerNight}
+                                        onChange={(e,value)=>{this.handleInput(e,value,'costPerNight')}}
                                         fullWidth={true}/>
                                 </div>
-                                <div className="col s4">
+                                <div className="hide-on-med-and-down">
+                                    <div className="col l3">
+                                        <TextField
+                                            min="0"
+                                            type="number"
+                                            defaultValue={this.state.fees}
+                                            floatingLabelText="3. Fees($)"
+                                            required={true}
+                                            onChange={(e,value)=>{this.handleInput(e,value,'fees')}}
+                                            fullWidth={true}/>
+                                    </div>
+                                    <div className="col l3">
+                                        <TextField
+                                            min="0"
+                                            max="100"
+                                            type="number"
+                                            defaultValue={this.state.taxRate}
+                                            floatingLabelText="4. Tax Rate (%1-100)"
+                                            required={true}
+                                            onChange={(e,value)=>{this.handleInput(e,value,'taxRate')}}
+                                            fullWidth={true}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row hide-on-large-only	">
+                                <div className="col s6">
                                     <TextField
+                                        min="0"
                                         type="number"
-                                        defaultValue={this.state.feesAndTaxes}
-                                        floatingLabelText="3. Fees and Taxes"
+                                        defaultValue={this.state.fees}
+                                        floatingLabelText="3. Fees($)"
                                         required={true}
-                                        onChange={this.updateFeesAndTaxes}
+                                        onChange={(e,value)=>{this.handleInput(e,value,'fees')}}
+                                        fullWidth={true}/>
+                                </div>
+                                <div className="col s6">
+                                    <TextField
+                                        min="0"
+                                        max="100"
+                                        type="number"
+                                        defaultValue={this.state.taxRate}
+                                        floatingLabelText="4. Tax Rate (%1-100)"
+                                        required={true}
+                                        onChange={(e,value)=>{this.handleInput(e,value,'taxRate')}}
                                         fullWidth={true}/>
                                 </div>
                             </div>
-                            <p className="roomie-header">4. Add some roomies and select the number of days they'll be in the room</p>
+                            <p className="roomie-header">5. Add some roomies and select the number of days they'll be in the room</p>
                             <div className="roomies-container">
                                 <RoomieComp key={`roomie-header`} roomie={{name: 'Name',daysInRoom: 'Days In Room',amountOwed: 'Amount Owed'}} idx={-1}
                                             onAdd={()=>{this.addRoomie(-1)}} onRemove={()=>{}}/>
@@ -94,18 +132,10 @@ class RoommateCalc extends React.Component {
             )
         }
     };
-    updateCostPerNight = (e,value) => {
-        const costPerNight = parseFloat(value) || 0.00;
-        if (costPerNight > 0){
-            this.setState({costPerNight},()=>{
-                this.recalcCost()
-            })
-        }
-    };
-    updateFeesAndTaxes = (e,value) => {
-        const feesAndTaxes = parseFloat(value) || 0.00;
-        if (feesAndTaxes > 0){
-            this.setState({feesAndTaxes},()=>{
+    handleInput=(e,value,prop)=>{
+        const parsedValue = parseFloat(value) || 0.00;
+        if (parsedValue > -1){
+            this.setState({[prop]:parsedValue},()=>{
                 this.recalcCost()
             })
         }
@@ -127,8 +157,6 @@ class RoommateCalc extends React.Component {
             this.recalcCost();
         })
     };
-
-
     addRoomie = (idx) => {
         const self= this;
         const currentRoomies = _.cloneDeep(this.state.roomies)
@@ -154,9 +182,13 @@ class RoommateCalc extends React.Component {
             self.recalcCost();
         })
     }
+    totalCost = ()=>{
+        const taxRate = ((this.state.taxRate + 100)/100);
+        return this.state.daysRented * this.state.costPerNight * taxRate + this.state.fees;
+    }
     recalcCost = () =>{
         const roomiesClone = _.cloneDeep(this.state.roomies);
-        const totalCost = (this.state.daysRented * this.state.costPerNight + this.state.feesAndTaxes).toFixed(2);
+        const totalCost = this.totalCost();
 
         let sumOfDaysRented = 0;
         roomiesClone.forEach((roomie)=>{
