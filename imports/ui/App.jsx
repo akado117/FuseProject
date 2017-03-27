@@ -1,6 +1,5 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql, gql } from 'react-apollo';
 import RoommateCalc from './components/RoommateCalc.jsx'
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -21,12 +20,12 @@ const App = ({/*data*/}) => (
   );
 
 // Initialize GraphQL queries or mutations with the `gql` tag
-const query = gql`query { say }`;
+//const query = gql`query { say{} }`;
 //const MyMutation = gql`mutation MyMutation { addTodo(text: "Test 123") { id } }`;
 
 // We then can use `graphql` to pass the query results returned by MyQuery
 // to MyComponent as a prop (and update them as the results change)
-export default graphql(query)(App);
+export default App//graphql(query)(App);
 
 // Or, we can bind the execution of MyMutation to a prop
 // export default graphql(MyMutation)(MyComponent);
