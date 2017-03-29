@@ -116,8 +116,6 @@ class RoommateCalc extends React.Component {
                                             onAdd={()=>{}} onRemove={()=>{}}/>
                             </div>
                             <div className="row footer-text">
-                                <p>Authored by: <a href="https://www.twitter.com/takoda117" target="_blank">Takoda</a></p>
-                                <p>Please feel to reach out with comments and concerns</p>
                             </div>
                         </div>
                     </div>
