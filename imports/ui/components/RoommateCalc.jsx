@@ -1,5 +1,6 @@
 import React from 'react'
 const _ = require('lodash')//required so it can be used easily in chrome dev tools.
+import { connect }  from 'react-redux';
 
 import FloatLabel from './forms/FloatLabelForm.jsx'
 
@@ -8,18 +9,23 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 
+import roomiesActions from '../../actions/RoomateActions'
+
 class RoommateCalc extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            roomies: [{"name":"Your","daysInRoom":2,"amountOwed":"187.18"},{"name":"Names","daysInRoom":3,"amountOwed":"280.77"},{"name":"Here","daysInRoom":2,"amountOwed":"187.18"}],
+            roomies: [],
             daysRented: 3,
             sumOfDaysRented: 1,
             costPerNight: 95,
             fees: 25,
             taxRate: 6
         }
+    }
+    componentDidMount = () => {
+        this.setState({roomies: this.props.roomies.roomies})
     }
     render() {
         const optionsForDays = []
@@ -182,6 +188,9 @@ class RoommateCalc extends React.Component {
             self.recalcCost();
         })
     }
+    saveRoomie = () => {
+
+    }
     totalCost = ()=>{
         const taxRate = ((this.state.taxRate + 100)/100);
         return this.state.daysRented * this.state.costPerNight * taxRate + this.state.fees;
@@ -228,4 +237,12 @@ function RoomieComp ({roomie, idx, onAdd, onRemove, nameOnChange,dayOnChange,day
     )
 }
 
-export default RoommateCalc
+
+function mapStateToProps(state) {
+    const {roomies} = state;
+    return {
+        roomies
+    };
+}
+//can also feed in dispatch mapper - this prevents the need to wrap every action function in dispatch
+export default connect(mapStateToProps)(RoommateCalc);
