@@ -1,4 +1,5 @@
 import Urls from '../collections/urls';
+import Roomies from '../collections/Roomies';
 
 export default {
   RootQuery: {
@@ -11,6 +12,13 @@ export default {
     urls(/* root, args, context */) {
       return Urls.find().fetch();
     },
+    getSavedRooms(/* root, args, context */) {
+      return Roomies.find().fetch();
+    },
+    getSavedRoom(root, {Id}){
+      console.log(JSON.stringify(Roomies.findOne({_id:Id})))
+      return Roomies.findOne({_id:Id});
+    }
   },
   RootMutation: {
     insertUrl(root, { url }) {

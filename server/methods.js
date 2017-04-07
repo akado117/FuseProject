@@ -3,7 +3,7 @@ import Roomies from '../imports/collections/Roomies'
 Meteor.methods({
     saveRoomies(roomies){
         if(roomies && typeof roomies === 'object' && roomies.length){
-            const roomieGUID = Roomies.insert(roomies);
+            const roomieGUID = Roomies.insert({roomies});
             console.log(`Roomies inserted ${JSON.stringify(roomies)}, with key ${roomieGUID}`);
 
             return {
