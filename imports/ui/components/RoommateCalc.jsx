@@ -13,7 +13,7 @@ class RoommateCalc extends React.Component {
         super();
 
         this.state = {
-            roomies: [],
+            roomies: [{"name":"Your","daysInRoom":2,"amountOwed":"187.18"},{"name":"Names","daysInRoom":3,"amountOwed":"280.77"},{"name":"Here","daysInRoom":2,"amountOwed":"187.18"}],
             daysRented: 3,
             sumOfDaysRented: 1,
             costPerNight: 95,
