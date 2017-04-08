@@ -11,7 +11,7 @@ export default {
                 ...error
             })
         } else {
-
+            debugger;
             dispatch({
                 type: Constants.actionTypes.SAVE_ROOMIES + '_PASS',
                 ...result

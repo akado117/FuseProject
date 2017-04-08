@@ -53,6 +53,9 @@
   .row {
     margin-bottom: 15px;
   }
+  .row.save-section {
+    margin: 15px 0;
+  }
   @media #{$small-and-down} {
     // styles for small screens and down
     padding: 0 5px;

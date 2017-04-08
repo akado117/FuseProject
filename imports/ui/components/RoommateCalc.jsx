@@ -143,6 +143,12 @@ class RoommateCalc extends React.Component {
                                 <RoomieComp key={`roomie-footer`} roomie={{name: ' ',daysInRoom: 'Total Owed',amountOwed: `$${totalCost}`}} idx={-2}
                                             onAdd={()=>{}} onRemove={()=>{}}/>
                             </div>
+                            <div className="row save-section valign-wrapper">
+                                <div className="col s3"><button onClick={this.saveRoomie} className="btn waves-effect waves-light light-blue darken-2">Save</button></div>
+                                <div className="col s8">{this.props.roomies.roomId
+                                    ? <a href={`${window.location.host}/room/${this.props.roomies.roomId}`}>{`${window.location.host}/room/${this.props.roomies.roomId}`}</a>
+                                    :''}</div>
+                            </div>
                             <div className="row footer-text">
                                 <p>Authored by: <a href="https://www.twitter.com/takoda117" target="_blank">Takoda</a></p>
                                 <p>Please feel to reach out with comments and concerns</p>
@@ -211,7 +217,7 @@ class RoommateCalc extends React.Component {
         })
     }
     saveRoomie = () => {
-
+        roomiesActions.saveRoomies(this.state.roomies,this.props.dispatch)
     }
     totalCost = ()=>{
         const taxRate = ((this.state.taxRate + 100)/100);
