@@ -17,6 +17,10 @@ export default [
 
   type Room {
     _id: String!
+    daysRented: Int!
+    costPerNight: Float!
+    fees: Float!
+    taxRate: Float!
     roomies: [Roomie]
   }
 

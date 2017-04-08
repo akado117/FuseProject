@@ -1,21 +1,22 @@
 import Roomies from '../imports/collections/Roomies'
 
 Meteor.methods({
-    saveRoomies(roomies){
-        if(roomies && typeof roomies === 'object' && roomies.length){
-            const roomieGUID = Roomies.insert({roomies});
-            console.log(`Roomies inserted ${JSON.stringify(roomies)}, with key ${roomieGUID}`);
+    saveRoomies(room){
+        if(room && typeof room === 'object' && room.roomies){
+            delete room._id
+            const roomieGUID = Roomies.insert(room);
+            console.log(`Roomies inserted ${JSON.stringify(room)}, with key ${roomieGUID}`);
 
             return {
                 serviceStatus: 'SUCCESS',
-                serviceMessage: `Roomies inserted ${roomies}, with key ${roomieGUID}`,
+                serviceMessage: `Roomies inserted ${room}, with key ${roomieGUID}`,
                 roomieId: roomieGUID
             }
         } else {
 
             return {
                 serviceStatus: 'FAILURE',
-                serviceMessage: `${roomies} failed to be created`
+                serviceMessage: `${JSON.stringify(room)} failed to be created`
             }
         }
     }

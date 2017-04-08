@@ -16,6 +16,7 @@ export default {
       return Roomies.find().fetch();
     },
     getSavedRoom(root, {Id}){
+      console.log(Roomies.findOne({_id:Id}))
       return Roomies.findOne({_id:Id});
     }
   },

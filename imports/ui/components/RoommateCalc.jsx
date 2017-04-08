@@ -28,10 +28,14 @@ class RoommateCalc extends React.Component {
     }
     componentDidMount = () => {
         if(this.props.params && this.props.params.roomId){
-            const data = this.props.client.query({
+            return this.props.client.query({
                 query: gql`{
                   response:getSavedRoom(Id:"${this.props.params.roomId}") {
                     _id
+                    daysRented
+                    costPerNight
+                    fees
+                    taxRate
                     roomies {
                       name
                       daysInRoom
@@ -40,8 +44,8 @@ class RoommateCalc extends React.Component {
                   }
                 }`
             }).then(({data})=>{
-                const roomies = data.response.roomies
-                this.setState({roomies})
+                const {costPerNight,daysRented,fees,roomies,taxRate} = data.response;
+                this.setState({costPerNight,daysRented,fees,roomies,taxRate})
             }).catch(()=>{
                 this.setState({roomies: this.props.roomies.roomies})
             })
@@ -79,7 +83,7 @@ class RoommateCalc extends React.Component {
                                     <TextField
                                         type="number"
                                         min="0"
-                                        defaultValue={this.state.costPerNight}
+                                        value={this.state.costPerNight}
                                         floatingLabelText="2. Cost per Night($)"
                                         required={true}
                                         onChange={(e,value)=>{this.handleInput(e,value,'costPerNight')}}
@@ -90,7 +94,7 @@ class RoommateCalc extends React.Component {
                                         <TextField
                                             min="0"
                                             type="number"
-                                            defaultValue={this.state.fees}
+                                            value={this.state.fees}
                                             floatingLabelText="3. Fees($)"
                                             required={true}
                                             onChange={(e,value)=>{this.handleInput(e,value,'fees')}}
@@ -101,7 +105,7 @@ class RoommateCalc extends React.Component {
                                             min="0"
                                             max="100"
                                             type="number"
-                                            defaultValue={this.state.taxRate}
+                                            value={this.state.taxRate}
                                             floatingLabelText="4. Tax Rate (%1-100)"
                                             required={true}
                                             onChange={(e,value)=>{this.handleInput(e,value,'taxRate')}}
@@ -114,7 +118,7 @@ class RoommateCalc extends React.Component {
                                     <TextField
                                         min="0"
                                         type="number"
-                                        defaultValue={this.state.fees}
+                                        value={this.state.fees}
                                         floatingLabelText="3. Fees($)"
                                         required={true}
                                         onChange={(e,value)=>{this.handleInput(e,value,'fees')}}
@@ -125,7 +129,7 @@ class RoommateCalc extends React.Component {
                                         min="0"
                                         max="100"
                                         type="number"
-                                        defaultValue={this.state.taxRate}
+                                        value={this.state.taxRate}
                                         floatingLabelText="4. Tax Rate (%1-100)"
                                         required={true}
                                         onChange={(e,value)=>{this.handleInput(e,value,'taxRate')}}
@@ -144,9 +148,9 @@ class RoommateCalc extends React.Component {
                                             onAdd={()=>{}} onRemove={()=>{}}/>
                             </div>
                             <div className="row save-section valign-wrapper">
-                                <div className="col s3"><button onClick={this.saveRoomie} className="btn waves-effect waves-light light-blue darken-2">Save</button></div>
+                                <div className="col s3"><button onClick={this.saveRoom} className="btn waves-effect waves-light light-blue darken-2">Save</button></div>
                                 <div className="col s8">{this.props.roomies.roomId
-                                    ? <a href={`${window.location.host}/room/${this.props.roomies.roomId}`}>{`${window.location.host}/room/${this.props.roomies.roomId}`}</a>
+                                    ? <a href={`${window.location.origin}/room/${this.props.roomies.roomId}`}>{`${window.location.hostname}/room/${this.props.roomies.roomId}`}</a>
                                     :''}</div>
                             </div>
                             <div className="row footer-text">
@@ -216,8 +220,8 @@ class RoommateCalc extends React.Component {
             self.recalcCost();
         })
     }
-    saveRoomie = () => {
-        roomiesActions.saveRoomies(this.state.roomies,this.props.dispatch)
+    saveRoom = () => {
+        roomiesActions.saveRoom(this.state,this.props.dispatch)
     }
     totalCost = ()=>{
         const taxRate = ((this.state.taxRate + 100)/100);

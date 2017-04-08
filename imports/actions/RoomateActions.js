@@ -3,7 +3,7 @@ import { graphql, gql } from 'react-apollo';
 
 
 export default {
-    saveRoomies : (roomies, dispatch) => Meteor.call('saveRoomies',roomies,(error,result)=>{
+    saveRoom : (room, dispatch) => Meteor.call('saveRoomies',room,(error,result)=>{
         if(error){
             console.log(error);
             dispatch({
@@ -11,7 +11,6 @@ export default {
                 ...error
             })
         } else {
-            debugger;
             dispatch({
                 type: Constants.actionTypes.SAVE_ROOMIES + '_PASS',
                 ...result
