@@ -1,4 +1,6 @@
 import Constants from '../lib/Constants'
+import { graphql, gql } from 'react-apollo';
+
 
 export default {
     saveRoomies : (roomies, dispatch) => Meteor.call('saveRoomies',roomies,(error,result)=>{
@@ -15,6 +17,19 @@ export default {
                 ...result
             })
         }
-    })
-
+    }),
+    getRoomById: (id, cb) => {
+        const query =  gql`{
+          getSavedRoom(Id:"${id}") {
+            _id
+            roomies {
+              name
+              daysInRoom
+              amountOwed
+            }
+          }
+        }`;
+       debugger;
+        return graphql(query, <Helper callbackFunc={cb}/>)
+    }
 }

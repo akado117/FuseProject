@@ -7,7 +7,6 @@ var initialState = {
 export default function roomateReducer(state = initialState, action = {}) {
     switch (action.type) {
         case Constants.actionTypes.SAVE_ROOMIES+'PASS':
-            debugger;
             return state;
         default:
             return state;

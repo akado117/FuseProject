@@ -21,6 +21,7 @@ Meteor.startup(() => {
         <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
             <Route path="/" component={App}>
                 <IndexRoute component={RoomieCalc}/>
+                <Route path="room/:roomId" component={RoomieCalc}/>
             </Route>
         </Router>
     </ApolloProvider>,

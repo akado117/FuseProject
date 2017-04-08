@@ -1,6 +1,8 @@
 import React from 'react'
 const _ = require('lodash')//required so it can be used easily in chrome dev tools.
 import { connect }  from 'react-redux';
+import { withApollo } from 'react-apollo';
+import { graphql, gql } from 'react-apollo';
 
 import FloatLabel from './forms/FloatLabelForm.jsx'
 
@@ -25,7 +27,27 @@ class RoommateCalc extends React.Component {
         }
     }
     componentDidMount = () => {
-        this.setState({roomies: this.props.roomies.roomies})
+        if(this.props.params && this.props.params.roomId){
+            const data = this.props.client.query({
+                query: gql`{
+                  response:getSavedRoom(Id:"${this.props.params.roomId}") {
+                    _id
+                    roomies {
+                      name
+                      daysInRoom
+                      amountOwed
+                    }
+                  }
+                }`
+            }).then(({data})=>{
+                const roomies = data.response.roomies
+                this.setState({roomies})
+            }).catch(()=>{
+                this.setState({roomies: this.props.roomies.roomies})
+            })
+        } else {
+            this.setState({roomies: this.props.roomies.roomies})
+        }
     }
     render() {
         const optionsForDays = []
@@ -245,4 +267,4 @@ function mapStateToProps(state) {
     };
 }
 //can also feed in dispatch mapper - this prevents the need to wrap every action function in dispatch
-export default connect(mapStateToProps)(RoommateCalc);
+export default connect(mapStateToProps)(withApollo(RoommateCalc));
