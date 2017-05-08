@@ -2,13 +2,12 @@
   "name": "meteor-apollo-react",
   "private": true,
   "scripts": {
-    "precommit": "npm run lint:errors",
     "start": "meteor run",
     "lint": "./node_modules/.bin/eslint client server imports",
     "lint:errors": "npm run lint -- --quiet",
     "lint:fix": "npm run lint -- --fix",
     "test": "meteor test --driver-package practicalmeteor:mocha -p 3001",
-    "now": "meteor-now -e ROOT_URL=http://conbuddy.net"
+    "now": "meteor-now -e ROOT_URL=https://www.conbuddy.net -e MONGO_URL=mongodb://mainAcct:Doggo#3@ds143030.mlab.com:43030/conbuddy"
   },
   "dependencies": {
     "apollo-client": "^1.0.0-rc.6",
@@ -34,6 +33,8 @@
     "react-router": "^3.0.3",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.5.2",
+    "redux-logger": "^2.6.1",
+    "redux-thunk": "^2.1.0",
     "subscriptions-transport-ws": "^0.5.5-alpha.0"
   },
   "devDependencies": {

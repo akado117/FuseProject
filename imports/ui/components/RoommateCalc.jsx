@@ -74,7 +74,7 @@ class RoommateCalc extends React.Component {
                             <p className="roomie-header">Set nights staying (#1), Set cost per night (#2), Set fees (#3), Set Taxes (#4), Follow step #5</p>
                             <div className="row">
                                 <div className="col s6 l3">
-                                    <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Days Rented"
+                                    <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Nights Rented"
                                                  floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true} floatingLabelStyle={floatLableStyle}>
                                         {optionsForDays}
                                     </SelectField>
@@ -150,7 +150,7 @@ class RoommateCalc extends React.Component {
                             <div className="row save-section valign-wrapper">
                                 <div className="col s3"><button onClick={this.saveRoom} className="btn waves-effect waves-light light-blue darken-2">Save</button></div>
                                 <div className="col s8">{this.props.roomies.roomId
-                                    ? <a href={`${window.location.origin}/room/${this.props.roomies.roomId}`}>{`${window.location.hostname}/room/${this.props.roomies.roomId}`}</a>
+                                    ? <a href={`https://www.conbuddy.net/room/${this.props.roomies.roomId}`}>{`www.conbuddy.net/room/${this.props.roomies.roomId}`}</a>
                                     :''}</div>
                             </div>
                             <div className="row footer-text">

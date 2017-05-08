@@ -5,6 +5,7 @@ import { render } from 'react-dom';
 
 import App from '../imports/ui/Layout.jsx';
 import RoomieCalc from '../imports/ui/components/RoommateCalc.jsx'
+import Fuse from '../imports/ui/components/FuseTestContainer.jsx'
 import store from '../imports/store/store'
 
 import ApolloClient from 'apollo-client';
@@ -22,6 +23,7 @@ Meteor.startup(() => {
             <Route path="/" component={App}>
                 <IndexRoute component={RoomieCalc}/>
                 <Route path="room/:roomId" component={RoomieCalc}/>
+                <Route path="fuse" component={Fuse}/>
             </Route>
         </Router>
     </ApolloProvider>,

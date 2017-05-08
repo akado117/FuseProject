@@ -118,10 +118,10 @@ class FuseTestContainer extends React.Component {
             return <h4 className='error' key={`error-${idx}`}>{str}</h4>
         });
         return (
-            <div className="fuse-container">
+            <div className="fuse-container container">
                 <form onSubmit={this.handleChange}>
-                    <h2>Please type or paste in an array of characters</h2>
-                    <h3>only use two different CHAR types and separate rows with enter</h3>
+                    <h1 className="title">Please type or paste in an array of characters</h1>
+                    <p className="helper-text">only use two different CHAR types and separate rows with enter</p>
 
                     <div className="input-section">
                         <label htmlFor="occupied">Alive Cell Char</label>
@@ -142,7 +142,7 @@ class FuseTestContainer extends React.Component {
                                 <label htmlFor="deadCharDisplay">Dead Cell Display</label>
                                 <input className="text-field" id="deadCharDisplay" ref="deadCharDisplay" type="text" defaultValue={this.state.displayChars.dead}/>
                                 <br/>
-                                <button type="btn" onClick={this.applyNewDisplayChars} >Apply New Display</button>
+                                <button type="btn" onClick={this.applyNewDisplayChars} className="btn waves-effect waves-light light-blue darken-2">Apply New Display</button>
                             </div>
                         </div>
                     </div>
@@ -155,10 +155,10 @@ aassasas
 ssaaassa
 aasasass
 ssassasa"/><br/>
-                    <button type="submit">Apply State</button>
+                    <button type="submit" className="btn waves-effect waves-light light-blue darken-2">Apply State</button>
                 </form>
                 {errors}
-                <h3>Click cell to toggle occupied/empty</h3>
+                <h2 className="sub-title">Click cell to toggle occupied/empty</h2>
                 <div className="table-content-container">
                     <table className="table-container">
                         <tbody>
@@ -168,9 +168,9 @@ ssassasa"/><br/>
                             })}
                         </tbody>
                     </table>
-                    <div className="table-desc-container"><span className="table-description">Alive = {this.state.displayChars.alive}</span><span>Alive = {this.state.displayChars.dead}</span></div>
+                    <p className="table-desc-container"><span className="table-description">Alive = {this.state.displayChars.alive}</span><span>Alive = {this.state.displayChars.dead}</span></p>
                 </div>
-                <button onClick={this.computeCycle}>Compute Cycle</button>
+                <button onClick={this.computeCycle} className="btn waves-effect waves-light light-blue darken-2">Compute Cycle</button>
             </div>
         );
     }

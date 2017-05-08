@@ -1,5 +1,9 @@
 .fuse-container {
 
+  .title {
+    font-size: 2.5em;
+  }
+
   .input-section{
     .text-field{
       width: 40px;
@@ -19,6 +23,9 @@
   table, th, td {
     border: 1px solid black;
 }
+  .sub-title{
+    font-size: 2em;
+  }
   .table-content-container {
     margin-top: 10px;
     .table-container {
