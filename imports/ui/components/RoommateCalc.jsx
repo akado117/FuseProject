@@ -13,6 +13,8 @@ import AppBar from 'material-ui/AppBar';
 
 import roomiesActions from '../../actions/RoomateActions'
 
+import DayProrater from './dayProrater.jsx';
+
 class RoommateCalc extends React.Component {
     constructor() {
         super();
@@ -75,7 +77,7 @@ class RoommateCalc extends React.Component {
                             <div className="row">
                                 <div className="col s6 l3">
                                     <SelectField value={this.state.daysRented} onChange={this.handleDaysChange} floatingLabelText="1. Nights Rented"
-                                                 floatingLabelStyle={{fontSize: "0.8rem"}} fullWidth={true} floatingLabelStyle={floatLableStyle}>
+                                                 fullWidth={true} floatingLabelStyle={floatLableStyle}>
                                         {optionsForDays}
                                     </SelectField>
                                 </div>
@@ -153,9 +155,9 @@ class RoommateCalc extends React.Component {
                                     ? <a href={`https://www.conbuddy.net/room/${this.props.roomies.roomId}`}>{`www.conbuddy.net/room/${this.props.roomies.roomId}`}</a>
                                     :''}</div>
                             </div>
+                            <DayProrater/>
                             <div className="row footer-text">
-                                <p>Authored by: <a href="https://www.twitter.com/takoda117" target="_blank">Takoda</a></p>
-                                <p>Please feel to reach out with comments and concerns</p>
+                                <p>Please feel free to reach out to <a href="https://www.twitter.com/takoda117" target="_blank">Takoda</a> with comments and concerns</p>
                             </div>
                         </div>
                     </div>
