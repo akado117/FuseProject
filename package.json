@@ -7,7 +7,7 @@
     "lint:errors": "npm run lint -- --quiet",
     "lint:fix": "npm run lint -- --fix",
     "test": "meteor test --driver-package practicalmeteor:mocha -p 3001",
-    "now": "meteor-now -e ROOT_URL=https://www.conbuddy.net -e MONGO_URL=mongodb://mainAcct:Doggo#3@ds143030.mlab.com:43030/conbuddy"
+    "now": "meteor-now"
   },
   "dependencies": {
     "apollo-client": "^1.0.0-rc.6",
