@@ -1,23 +1,30 @@
 .fuse-container {
 
+  .title {
+    font-size: 2.5em;
+  }
+
   .input-section{
     .text-field{
       width: 40px;
       margin: 10px;
       font-size: 16px;
-    }
   }
+}
 
   textarea {
     margin-top: 10px;
-  }
+}
 
   .error {
     color: #c90b0e;
     margin: 5px 0;
-  }
+}
   table, th, td {
     border: 1px solid black;
+}
+  .sub-title{
+    font-size: 2em;
   }
   .table-content-container {
     margin-top: 10px;
@@ -29,16 +36,16 @@
           text-align: center;
           font-size: 30px;
 
-        }
       }
     }
+  }
     .table-desc-container {
       .table-description {
         margin: 10px 25px 10px 0;
-      }
     }
   }
+}
   .hidden {
     display: none;
-  }
+}
 }

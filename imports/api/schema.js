@@ -9,6 +9,21 @@ export default [
     bar: String
   }
 
+  type Roomie {
+    name: String,
+    daysInRoom: Int,
+    amountOwed: Float
+  }
+
+  type Room {
+    _id: String!
+    daysRented: Int!
+    costPerNight: Float!
+    fees: Float!
+    taxRate: Float!
+    roomies: [Roomie]
+  }
+
   type RootMutation {
     insertUrl(url: String!): Url
   }
@@ -17,6 +32,8 @@ export default [
     say: Test
     says: [Test]
     urls: [Url]
+    getSavedRoom(Id: String!): Room
+    getSavedRooms: [Room]
   }
 
   schema {
