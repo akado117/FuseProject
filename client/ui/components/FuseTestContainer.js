@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 const _ = require('lodash')//required so it can be used easily in chrome dev tools.
 
 class FuseTestContainer extends React.Component {
@@ -7,12 +7,12 @@ class FuseTestContainer extends React.Component {
 
         this.state = {
             errors: [],
-            grid: "asassasasassaasaaassasasssaaassaaasasassssassasa",
+            grid: 'asassasasassaasaaassasasssaaassaaasasassssassasa',
             rowLength: 8,
             aliveChar: 's',
             deadChar: 'a',
             displayChars: {
-                alive: "😸",
+                alive: '😸',
                 dead: '💀'
             }
         }
@@ -90,24 +90,24 @@ class FuseTestContainer extends React.Component {
         const newGrid = grid.substr(0,position) + replacementChar + grid.substr(position+1)
 
 
-        this.setState({grid:newGrid})
+        this.setState({ grid: newGrid });
 
     }
     toggleCharDisplayPicker = (e) => {
         const fieldWrapper = document.querySelector('#displayChar');
-        if(!e.currentTarget.checked){
-            fieldWrapper.className += " hidden"
+        if (!e.currentTarget.checked) {
+            fieldWrapper.className += ' hidden';
         } else {
             fieldWrapper.className = fieldWrapper.className.replace('hidden', '')
         }
     }
     applyNewDisplayChars = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         const alive = this.refs.aliveCharDisplay.value || this.state.displayChars.alive;
         const dead = this.refs.deadCharDisplay.value || this.state.displayChars.dead;
 
-        this.setState({displayChars:{alive,dead}})
+        this.setState({ displayChars: { alive, dead } });
     }
     render() {
         const self = this;

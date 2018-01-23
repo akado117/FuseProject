@@ -1,4 +1,4 @@
-import Roomies from '../imports/collections/Roomies'
+import Roomies from '../imports/collections/Roomies';
 
 Meteor.methods({
     saveRoomies(room){

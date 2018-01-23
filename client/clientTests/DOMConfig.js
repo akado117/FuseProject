@@ -1,4 +1,4 @@
-const jsdom = require('jsdom').jsdom;
+//const jsdom = require('jsdom').jsdom;
 
 module.exports = function (markup) {
     if (typeof document !== 'undefined') return;

@@ -1,20 +1,20 @@
-import Constants from '../lib/Constants'
 import { graphql, gql } from 'react-apollo';
+import Constants from '../constants/Constants';
 
 
 export default {
-    saveRoom : (room, dispatch) => Meteor.call('saveRoomies',room,(error,result)=>{
+    saveRoom: (room, dispatch) => Meteor.call('saveRoomies',room,(error,result)=>{
         if(error){
             console.log(error);
             dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_FAIL',
-                ...error
-            })
+                type: `${Constants.actionTypes.SAVE_ROOMIES}_FAIL`,
+                ...error,
+            });
         } else {
             dispatch({
-                type: Constants.actionTypes.SAVE_ROOMIES + '_PASS',
-                ...result
-            })
+                type: `${Constants.actionTypes.SAVE_ROOMIES}_PASS`,
+                ...result,
+            });
         }
     }),
     getRoomById: (id, cb) => {
@@ -28,7 +28,6 @@ export default {
             }
           }
         }`;
-       debugger;
         return graphql(query, <Helper callbackFunc={cb}/>)
-    }
-}
+    },
+};
